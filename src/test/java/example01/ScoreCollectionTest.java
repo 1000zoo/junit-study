@@ -1,4 +1,4 @@
-package chapter01;
+package example01;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

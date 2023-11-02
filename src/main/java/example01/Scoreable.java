@@ -1,4 +1,4 @@
-package chapter01;
+package example01;
 
 @FunctionalInterface
 public interface Scoreable {
