@@ -11,6 +11,9 @@ public class ProfileTest {
     private static BooleanQuestion questionIsThereRelocation;
     private static Answer answerThereIsRelocation;
     private static Answer answerThereIsNotRelocation;
+    private static Answer answerReimburseTuition;
+    private static Answer answerDoesNotReimburseTuition;
+    private static Criteria criteria;
 
     @BeforeAll
     private static void createProfile() {
@@ -22,6 +25,13 @@ public class ProfileTest {
         questionIsThereRelocation = new BooleanQuestion(1, "Relocation package?");
         answerThereIsRelocation = new Answer(questionIsThereRelocation, Bool.TRUE);
         answerThereIsNotRelocation = new Answer(questionIsThereRelocation, Bool.FALSE);
+        answerReimburseTuition = new Answer(new BooleanQuestion(1, ""), Bool.FALSE);
+        answerDoesNotReimburseTuition = new Answer(new BooleanQuestion(1, ""), Bool.TRUE);
+    }
+
+    @BeforeAll
+    private static void createCriteria() {
+        criteria = new Criteria();
     }
 
     @Test
@@ -67,5 +77,33 @@ public class ProfileTest {
     @Test
     public void matchAgainstNullAnswerReturnsFalse() {
         assertThat(new Answer(new BooleanQuestion(0, ""), Bool.TRUE).match(null)).isEqualTo(false);
+    }
+
+    @Test
+    void doesNotMatchWhenNoneOfMultipleCriteriaMatch() {
+        profile.add(answerDoesNotReimburseTuition);
+        criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
+        criteria.add(new Criterion(answerDoesNotReimburseTuition, Weight.Important));
+
+        boolean result = profile.matches(criteria);
+
+        assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    void matchesWhenAnyOfMultipleCriteriaMatch() {
+        profile.add(answerThereIsRelocation);
+        criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
+        criteria.add(new Criterion(answerDoesNotReimburseTuition, Weight.Important));
+
+        assertThat(profile.matches(criteria)).isEqualTo(true);
+    }
+
+    @Test
+    void matchesWhenCriterionIsDontCare() {
+        profile.add(answerDoesNotReimburseTuition);
+        Criterion criterion = new Criterion(answerReimburseTuition, Weight.DontCare);
+
+        assertThat(profile.matches(criterion)).isEqualTo(true);
     }
 }
