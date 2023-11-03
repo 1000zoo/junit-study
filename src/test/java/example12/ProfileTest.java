@@ -52,4 +52,20 @@ public class ProfileTest {
 
         assertThat(result).isEqualTo(false);
     }
+
+    @Test
+    void matchesWhenContainsMultipleAnswers() {
+        profile.add(answerThereIsRelocation);
+        profile.add(answerThereIsNotRelocation);
+        Criterion criterion = new Criterion(answerThereIsNotRelocation, Weight.Important);
+
+        boolean result = profile.matches(criterion);
+
+        assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    public void matchAgainstNullAnswerReturnsFalse() {
+        assertThat(new Answer(new BooleanQuestion(0, ""), Bool.TRUE).match(null)).isEqualTo(false);
+    }
 }
