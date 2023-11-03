@@ -9,7 +9,10 @@
 package example02;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Profile {
     private final Map<String, Answer> answers = new HashMap<>();
@@ -52,6 +55,10 @@ public class Profile {
             return false;
         }
         return anyMatches;
+    }
+
+    public List<Answer> find(Predicate<Answer> predicate) {
+        return answers.values().stream().filter(predicate).collect(Collectors.toList());
     }
 
     public int score() {

@@ -23,6 +23,10 @@ public class Answer {
         this.i = characteristic.indexOf(matchingValue);
     }
 
+    public Question getQuestion() {
+        return question;
+    }
+
     public String getQuestionText() {
         return question.getText();
     }
