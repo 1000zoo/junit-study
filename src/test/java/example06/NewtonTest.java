@@ -24,4 +24,12 @@ public class NewtonTest {
         double result = Newton.squareRoot(origin);
         Assertions.assertThat(result).isCloseTo(origin, Percentage.withPercentage(PERCENTAGE));
     }
+
+    @Test
+    public void squareRootCrossTest() {
+        final double PERCENTAGE = 99.999999;
+        final double origin = 250.0;
+        double result = Newton.squareRoot(origin);
+        Assertions.assertThat(result).isCloseTo(Math.sqrt(origin), Percentage.withPercentage(PERCENTAGE));
+    }
 }
