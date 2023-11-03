@@ -16,4 +16,17 @@ public class ProfileTest {
 
         assertThat(result).isEqualTo(false);
     }
+
+    @Test
+    void matchesWhenProfileContainsMatchingAnswer() {
+        Profile profile = new Profile();
+        Question question = new BooleanQuestion(1, "Relocation package?");
+        Answer answer = new Answer(question, Bool.TRUE);
+        profile.add(answer);
+        Criterion criterion = new Criterion(answer, Weight.Important);
+
+        boolean result = profile.matches(criterion);
+
+        assertThat(result).isEqualTo(true);
+    }
 }
